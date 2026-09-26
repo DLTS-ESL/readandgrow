@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Read & Grow</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #e9f8ee, #e8f4ff);
+        color: #263238;
+        min-height: 100vh;
+    }
+
+    .app {
+        max-width: 950px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    /* HEADER */
+
+    header {
+        text-align: center;
+        padding: 20px 10px 10px;
+    }
+
+    .logo {
+        font-size: 55px;
+        margin-bottom: 5px;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 38px;
+        color: #315f3b;
+    }
+
+    .subtitle {
+        margin-top: 8px;
+        color: #607d68;
+        font-size: 17px;
+    }
+
+    /* LEVEL SELECTOR */
+
+    .level-section {
+        background: white;
+        border-radius: 22px;
+        padding: 20px;
+        margin-top: 20px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .section-title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .levels {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+
+    .level-btn {
+        border: 3px solid #dfeee2;
+        background: #f8fcf9;
+        border-radius: 18px;
+        padding: 15px 10px;
+        cursor: pointer;
+        transition: 0.2s;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .level-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .level-btn.active {
+        border-color: #55a866;
+        background: #e9f8ec;
+    }
+
+    .level-icon {
+        font-size: 32px;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .level-description {
+        display: block;
+        font-size: 12px;
+        font-weight: normal;
+        color: #718078;
+        margin-top: 5px;
+    }
+
+    /* STORY */
+
+    .story-card {
+        background: white;
+        border-radius: 25px;
+        margin-top: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .story-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .story-number {
+        font-weight: bold;
+        color: #66806c;
+    }
+
+    .level-label {
+        background: #eaf6ec;
+        color: #3e7448;
+        padding: 8px 13px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .story {
+        font-size: 27px;
+        line-height: 1.8;
+        min-height: 250px;
+        text-align: left;
+        padding: 10px;
+    }
+
+    .sentence {
+        display: block;
+        margin-bottom: 12px;
+    }
+
+    .word {
+        display: inline-block;
+        cursor: pointer;
+        padding: 2px 5px;
+        border-radius: 7px;
+        transition: 0.15s;
+        margin: 0 1px;
+    }
+
+    .word:hover {
+        background: #eef7f0;
+    }
+
+    .word.incorrect {
+        color: #d62828;
+        background: #ffe7e7;
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+    }
+
+    /* INSTRUCTION */
+
+    .instruction {
+        background: #f4f9f5;
+        border-radius: 15px;
+        padding: 12px 15px;
+        text-align: center;
+        color: #607d68;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    /* SCORE */
+
+    .score-card {
+        margin-top: 20px;
+        background: #ffffff;
+        border-radius: 22px;
+        padding: 20px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+    }
+
+    .score-title {
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .score-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+
+    .score-box {
+        text-align: center;
+        background: #f7faf8;
+        border-radius: 15px;
+        padding: 15px 8px;
+    }
+
+    .score-number {
+        font-size: 27px;
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
+
+    .score-label {
+        font-size: 12px;
+        color: #738078;
+    }
+
+    .accuracy-box {
+        background: #eaf8ed;
+    }
+
+    .accuracy {
+        color: #328344;
+    }
+
+    /* WORDS TO PRACTICE */
+
+    .practice {
+        margin-top: 15px;
+        background: #fff5f5;
+        border-radius: 15px;
+        padding: 15px;
+        display: none;
+    }
+
+    .practice.show {
+        display: block;
+    }
+
+    .practice-title {
+        font-weight: bold;
+        color: #bd3131;
+        margin-bottom: 8px;
+    }
+
+    .practice-words {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+    }
+
+    .practice-word {
+        background: #ffe1e1;
+        color: #b92929;
+        padding: 5px 9px;
+        border-radius: 10px;
+        font-weight: bold;
+    }
+
+    /* BUTTONS */
+
+    .controls {
+        display: grid;
+        grid-template-columns: 1fr 1.3fr 1fr;
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    button {
+        font-family: inherit;
+    }
+
+    .control-btn {
+        border: none;
+        border-radius: 16px;
+        padding: 15px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .control-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .back-btn {
+        background: #edf1f3;
+        color: #536169;
+    }
+
+    .next-btn {
+        background: #55a866;
+        color: white;
+    }
+
+    .new-btn {
+        background: #6aaed6;
+        color: white;
+    }
+
+    .control-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* SESSION */
+
+    .session-card {
+        margin-top: 20px;
+        background: white;
+        border-radius: 22px;
+        padding: 20px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+    }
+
+    .session-title {
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .session-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .session-stat {
+        text-align: center;
+        background: #f6f9f7;
+        border-radius: 15px;
+        padding: 15px;
+    }
+
+    .session-stat strong {
+        display: block;
+        font-size: 24px;
+        color: #3d7547;
+    }
+
+    .session-stat span {
+        font-size: 12px;
+        color: #77827b;
+    }
+
+    /* RESET */
+
+    .reset-area {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .reset-btn {
+        border: none;
+        background: transparent;
+        color: #758078;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: 13px;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 700px) {
+
+        .app {
+            padding: 12px;
+        }
+
+        h1 {
+            font-size: 30px;
+        }
+
+        .logo {
+            font-size: 45px;
+        }
+
+        .levels {
+            grid-template-columns: 1fr;
+        }
+
+        .level-btn {
+            padding: 12px;
+        }
+
+        .story-card {
+            padding: 18px;
+        }
+
+        .story {
+            font-size: 21px;
+            line-height: 1.8;
+            min-height: 300px;
+        }
+
+        .score-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .controls {
+            grid-template-columns: 1fr;
+        }
+
+        .session-stats {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <header>
+        <div class="logo">🌱</div>
+        <h1>Read & Grow</h1>
+        <div class="subtitle">
+            Read the story and tap a word if it is difficult to read.
+        </div>
+    </header>
+
+
+    <!-- LEVEL -->
+
+    <section class="level-section">
+
+        <div class="section-title">
+            Choose Your Reading Level
+        </div>
+
+        <div class="levels">
+
+            <button class="level-btn active" data-level="beginner">
+                <span class="level-icon">🌱</span>
+                Beginner
+                <span class="level-description">
+                    Short words & simple sentences
+                </span>
+            </button>
+
+            <button class="level-btn" data-level="medium">
+                <span class="level-icon">🌿</span>
+                Medium
+                <span class="level-description">
+                    Blends & longer sentences
+                </span>
+            </button>
+
+            <button class="level-btn" data-level="hard">
+                <span class="level-icon">🌳</span>
+                Hard
+                <span class="level-description">
+                    Longer words & complex sentences
+                </span>
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- STORY -->
+
+    <section class="story-card">
+
+        <div class="story-header">
+
+            <div class="story-number" id="storyNumber">
+                Passage 1
+            </div>
+
+            <div class="level-label" id="levelLabel">
+                🌱 Beginner
+            </div>
+
+        </div>
+
+
+        <div class="story" id="story">
+        </div>
+
+
+        <div class="instruction">
+            💡 Tap a word if the student cannot read it correctly.
+            Tap it again to mark it correct.
+        </div>
+
+    </section>
+
+
+    <!-- SCORE -->
+
+    <section class="score-card">
+
+        <div class="score-title">
+            📖 Reading Accuracy
+        </div>
+
+        <div class="score-grid">
+
+            <div class="score-box">
+                <div class="score-number" id="totalWords">
+                    0
+                </div>
+                <div class="score-label">
+                    Total Words
+                </div>
+            </div>
+
+            <div class="score-box">
+                <div class="score-number" id="correctWords">
+                    0
+                </div>
+                <div class="score-label">
+                    Correct
+                </div>
+            </div>
+
+            <div class="score-box">
+                <div class="score-number" id="incorrectWords">
+                    0
+                </div>
+                <div class="score-label">
+                    Needs Practice
+                </div>
+            </div>
+
+            <div class="score-box accuracy-box">
+                <div class="score-number accuracy" id="accuracy">
+                    100%
+                </div>
+                <div class="score-label">
+                    Accuracy
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="practice" id="practice">
+
+            <div class="practice-title">
+                🔴 Words to Practice
+            </div>
+
+            <div class="practice-words" id="practiceWords">
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CONTROLS -->
+
+    <div class="controls">
+
+        <button class="control-btn back-btn" id="backBtn">
+            ← Back
+        </button>
+
+        <button class="control-btn new-btn" id="newBtn">
+            ✨ New Story
+        </button>
+
+        <button class="control-btn next-btn" id="nextBtn">
+            Next →
+        </button>
+
+    </div>
+
+
+    <!-- SESSION -->
+
+    <section class="session-card">
+
+        <div class="session-title">
+            📊 Today's Reading Progress
+        </div>
+
+        <div class="session-stats">
+
+            <div class="session-stat">
+                <strong id="passagesRead">0</strong>
+                <span>Passages</span>
+            </div>
+
+            <div class="session-stat">
+                <strong id="averageAccuracy">100%</strong>
+                <span>Average Accuracy</span>
+            </div>
+
+            <div class="session-stat">
+                <strong id="wordsRead">0</strong>
+                <span>Words Correct</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <div class="reset-area">
+        <button class="reset-btn" id="resetBtn">
+            Reset today's progress
+        </button>
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   READING DATABASE
+   ========================================================= */
+
+
+/* BEGINNER WORDS */
+
+const beginnerWords = {
+
+    sight: [
+        "a", "the", "is", "I", "am", "can",
+        "see", "my", "we", "go", "to", "in",
+        "on", "it", "he", "she", "and",
+        "at", "has", "like", "this", "that"
+    ],
+
+    cvc: [
+        "cat", "bat", "hat", "mat", "sat",
+        "rat", "dog", "log", "fog", "hot",
+        "pot", "pig", "big", "dig", "sit",
+        "hit", "fin", "win", "run", "sun",
+        "fun", "cup", "bus", "bug", "bed",
+        "red", "hen", "pen", "ten", "leg",
+        "web", "jam", "ham", "map", "cap",
+        "man", "fan", "bag", "tag", "van"
+    ],
+
+    blend: [
+        "stop", "step", "spin", "frog",
+        "flag", "clap", "trip", "grab",
+        "plan", "slip", "drop"
+    ]
+
+};
+
+
+/* MEDIUM WORDS */
+
+const mediumWords = {
+
+    sight: [
+        "the", "a", "is", "are", "was",
+        "were", "can", "will", "with",
+        "from", "they", "he", "she",
+        "his", "her", "their", "there",
+        "here", "when", "where", "what",
+        "this", "that", "because", "then",
+        "after", "before", "into", "over"
+    ],
+
+    cvc: [
+        "rabbit", "basket", "kitten", "picnic",
+        "planet", "window", "garden",
+        "sunset", "little", "happy",
+        "yellow", "purple", "winter",
+        "summer", "water", "paper"
+    ],
+
+    blend: [
+        "black", "brown", "green", "grass",
+        "small", "sleep", "splash", "street",
+        "school", "strong", "brush", "clean",
+        "climb", "cloud", "dream", "friend",
+        "plant", "play", "slide", "truck",
+        "train", "crab", "frog", "flag",
+        "block", "bring", "close", "drink"
+    ]
+
+};
+
+
+/* HARD WORDS */
+
+const hardWords = {
+
+    sight: [
+        "although", "because", "before", "after",
+        "while", "during", "through",
+        "another", "different", "together",
+        "finally", "sometimes", "always",
+        "carefully", "quickly", "usually",
+        "everyone", "something"
+    ],
+
+    longer: [
+        "adventure", "beautiful", "carefully",
+        "different", "excited", "favorite",
+        "important", "remember",
+        "wonderful", "surprise",
+        "discover", "playground",
+        "backpack", "sunshine",
+        "afternoon", "grandmother",
+        "friendship", "rainbow",
+        "elephant", "dinosaur",
+        "butterfly", "basketball",
+        "yesterday", "tomorrow"
+    ],
+
+    blend: [
+        "bright", "brown", "strong", "straight",
+        "scrape", "spring", "street",
+        "friendly", "planting", "climbing",
+        "floating", "sleeping", "playing",
+        "throwing", "running", "skipping",
+        "shouting", "smiling"
+    ]
+
+};
+
+
+/* =========================================================
+   STORY TEMPLATES
+   ========================================================= */
+
+
+/* BEGINNER STORIES */
+
+const beginnerStories = [
+
+    [
+        "The {animal} is on the {place}.",
+        "It can {verb} to the {place}.",
+        "I can see the {animal}.",
+        "The {animal} is very {adjective}."
+    ],
+
+    [
+        "I see a {animal}.",
+        "The {animal} can {verb}.",
+        "It is on the {place}.",
+        "I like the {animal}."
+    ],
+
+    [
+        "{name} has a {object}.",
+        "The {object} is {adjective}.",
+        "{name} can {verb} with it.",
+        "It is fun to play."
+    ],
+
+    [
+        "The {animal} can {verb}.",
+        "It can go to the {place}.",
+        "I can see it there.",
+        "The {animal} is {adjective}."
+    ],
+
+    [
+        "{name} can {verb} in the {place}.",
+        "He sees a {animal}.",
+        "The {animal} can {verb}.",
+        "{name} is happy."
+    ]
+
+];
+
+
+/* MEDIUM STORIES */
+
+const mediumStories = [
+
+    [
+        "{name} walks to the {place} with a {object}.",
+        "He sees a {animal} near the {object}.",
+        "The {animal} can {verb} across the {place}.",
+        "{name} smiles because the {animal} is {adjective}."
+    ],
+
+    [
+        "The {animal} walks across the {place} in the morning.",
+        "{name} sees it and starts to {verb}.",
+        "They move past a {object} together.",
+        "Soon, they reach a small {place}."
+    ],
+
+    [
+        "{name} brings a {object} to the {place}.",
+        "A {animal} is waiting near the {object}.",
+        "The animal begins to {verb} through the grass.",
+        "{name} follows it with a big smile."
+    ],
+
+    [
+        "After school, {name} goes to the {place}.",
+        "He finds a {adjective} {object} near the grass.",
+        "A {animal} comes over to look at it.",
+        "Together, they {verb} around the playground."
+    ]
+
+];
+
+
+/* HARD STORIES */
+
+const hardStories = [
+
+    [
+        "After school, {name} carefully walks toward the {place} with an exciting idea.",
+        "Along the way, {name} discovers a {adjective} {animal} hiding beside a {object}.",
+        "The animal suddenly begins to {verb}, and {name} follows it across the playground.",
+        "By the afternoon, they have discovered something wonderful together."
+    ],
+
+    [
+        "On a bright morning, {name} packs a {object} before leaving for an exciting adventure.",
+        "While walking through the {place}, {name} notices a {adjective} {animal} near the trees.",
+        "The animal begins to {verb} quickly, so {name} carefully follows behind.",
+        "When they finally reach the end of the path, {name} discovers a beautiful surprise."
+    ],
+
+    [
+        "{name} decides to explore the {place} because the weather is bright and sunny.",
+        "While exploring, {name} discovers a {adjective} {animal} beside an old {object}.",
+        "The animal starts to {verb}, and soon they are moving together through the grass.",
+        "Although the adventure is tiring, {name} feels happy about the wonderful discovery."
+    ]
+
+];
+
+
+/* =========================================================
+   WORD LISTS FOR STORY GENERATION
+   ========================================================= */
+
+const names = [
+    "Sam", "Ben", "Tom", "Max",
+    "Mia", "Lily", "Amy", "Jack",
+    "Nina", "Leo"
+];
+
+const animals = [
+    "cat", "dog", "pig", "frog",
+    "hen", "duck", "rabbit", "bird",
+    "fish", "bug"
+];
+
+const places = [
+    "park", "mat", "bed",
+    "school", "pond", "garden",
+    "grass", "yard", "tree"
+];
+
+const objects = [
+    "bag", "book", "ball",
+    "hat", "box", "cup",
+    "flag", "truck", "stick"
+];
+
+const verbsBeginner = [
+    "run", "sit", "hop", "jump",
+    "walk", "play", "nap",
+    "look", "skip", "stop"
+];
+
+const verbsMedium = [
+    "climb", "splash", "brush",
+    "slide", "plant", "jump",
+    "play", "walk", "run",
+    "bring", "drink"
+];
+
+const verbsHard = [
+    "explore", "discover", "climb",
+    "follow", "search", "travel",
+    "investigate", "collect",
+    "remember", "continue"
+];
+
+const adjectivesBeginner = [
+    "big", "red", "hot",
+    "fun", "sad", "happy",
+    "small", "wet"
+];
+
+const adjectivesMedium = [
+    "small", "green", "bright",
+    "happy", "friendly",
+    "little", "brown",
+    "strong", "quiet"
+];
+
+const adjectivesHard = [
+    "beautiful", "exciting",
+    "colorful", "friendly",
+    "mysterious", "wonderful",
+    "interesting", "surprising",
+    "bright", "peaceful"
+];
+
+
+/* =========================================================
+   APPLICATION STATE
+   ========================================================= */
+
+let currentLevel = "beginner";
+
+let passageHistory = [];
+
+let currentPassageIndex = 0;
+
+let sessionResults = [];
+
+
+/* =========================================================
+   HELPER FUNCTIONS
+   ========================================================= */
+
+function randomItem(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+
+function capitalizeFirst(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+
+/* =========================================================
+   GENERATE STORY
+   ========================================================= */
+
+function generateStory(level) {
+
+    let templates;
+
+    if (level === "beginner") {
+        templates = beginnerStories;
+    } else if (level === "medium") {
+        templates = mediumStories;
+    } else {
+        templates = hardStories;
+    }
+
+    const selectedTemplate = randomItem(templates);
+
+    let storyData = {
+
+        name: randomItem(names),
+
+        animal: randomItem(animals),
+
+        place: randomItem(places),
+
+        object: randomItem(objects),
+
+        verb:
+            level === "beginner"
+                ? randomItem(verbsBeginner)
+                : level === "medium"
+                ? randomItem(verbsMedium)
+                : randomItem(verbsHard),
+
+        adjective:
+            level === "beginner"
+                ? randomItem(adjectivesBeginner)
+                : level === "medium"
+                ? randomItem(adjectivesMedium)
+                : randomItem(adjectivesHard)
+
+    };
+
+
+    let sentences = selectedTemplate.map(sentence => {
+
+        let result = sentence;
+
+        Object.keys(storyData).forEach(key => {
+
+            const placeholder = `{${key}}`;
+
+            result = result.replace(
+                new RegExp(placeholder, "g"),
+                storyData[key]
+            );
+
+        });
+
+        return result;
+
+    });
+
+
+    return sentences;
+}
+
+
+/* =========================================================
+   CREATE PASSAGE OBJECT
+   ========================================================= */
+
+function createPassage(level) {
+
+    return {
+
+        level: level,
+
+        sentences: generateStory(level),
+
+        incorrect: []
+
+    };
+
+}
+
+
+/* =========================================================
+   DISPLAY PASSAGE
+   ========================================================= */
+
+function displayPassage() {
+
+    const passage = passageHistory[currentPassageIndex];
+
+    if (!passage) return;
+
+
+    const storyElement = document.getElementById("story");
+
+    storyElement.innerHTML = "";
+
+
+    passage.sentences.forEach(sentence => {
+
+        const sentenceElement = document.createElement("div");
+
+        sentenceElement.className = "sentence";
+
+
+        /*
+         * Split punctuation away from words.
+         */
+
+        const parts = sentence.split(/(\s+)/);
+
+
+        parts.forEach(part => {
+
+            if (part.trim() === "") {
+
+                sentenceElement.appendChild(
+                    document.createTextNode(part)
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * Separate punctuation from word.
+             */
+
+            const match = part.match(/^(.+?)([.,!?]*)$/);
+
+            const wordText = match ? match[1] : part;
+
+            const punctuation = match ? match[2] : "";
+
+
+            const wordButton = document.createElement("span");
+
+            wordButton.className = "word";
+
+            wordButton.textContent = wordText;
+
+
+            /*
+             * Give each word a unique key.
+             */
+
+            const wordKey =
+                passage.sentences.indexOf(sentence) +
+                "-" +
+                wordText.toLowerCase();
+
+
+            if (passage.incorrect.includes(wordKey)) {
+
+                wordButton.classList.add("incorrect");
+
+            }
+
+
+            wordButton.addEventListener("click", function() {
+
+                toggleWord(
+                    passage,
+                    wordKey,
+                    wordButton
+                );
+
+            });
+
+
+            sentenceElement.appendChild(wordButton);
+
+
+            if (punctuation) {
+
+                sentenceElement.appendChild(
+                    document.createTextNode(punctuation)
+                );
+
+            }
+
+        });
+
+
+        storyElement.appendChild(sentenceElement);
+
+    });
+
+
+    updateScore();
+
+    updateNavigation();
+
+    updateStoryNumber();
+
+}
+
+
+/* =========================================================
+   TOGGLE WORD
+   ========================================================= */
+
+function toggleWord(passage, wordKey, element) {
+
+    const index = passage.incorrect.indexOf(wordKey);
+
+
+    if (index === -1) {
+
+        passage.incorrect.push(wordKey);
+
+        element.classList.add("incorrect");
+
+    } else {
+
+        passage.incorrect.splice(index, 1);
+
+        element.classList.remove("incorrect");
+
+    }
+
+
+    updateScore();
+
+}
+
+
+/* =========================================================
+   COUNT WORDS
+   ========================================================= */
+
+function countWords(passage) {
+
+    let total = 0;
+
+
+    passage.sentences.forEach(sentence => {
+
+        const words = sentence
+            .replace(/[.,!?]/g, "")
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+
+        total += words.length;
+
+    });
+
+
+    return total;
+}
+
+
+/* =========================================================
+   GET INCORRECT WORD TEXT
+   ========================================================= */
+
+function getIncorrectWords(passage) {
+
+    const result = [];
+
+
+    passage.sentences.forEach((sentence, sentenceIndex) => {
+
+        const words = sentence
+            .replace(/[.,!?]/g, "")
+            .trim()
+            .split(/\s+/);
+
+
+        words.forEach(word => {
+
+            const key =
+                sentenceIndex +
+                "-" +
+                word.toLowerCase();
+
+
+            if (passage.incorrect.includes(key)) {
+
+                result.push(word);
+
+            }
+
+        });
+
+    });
+
+
+    return result;
+}
+
+
+/* =========================================================
+   UPDATE SCORE
+   ========================================================= */
+
+function updateScore() {
+
+    const passage = passageHistory[currentPassageIndex];
+
+    if (!passage) return;
+
+
+    const total = countWords(passage);
+
+    const incorrect = passage.incorrect.length;
+
+    const correct = Math.max(0, total - incorrect);
+
+
+    let accuracy = 100;
+
+    if (total > 0) {
+
+        accuracy = Math.round(
+            (correct / total) * 100
+        );
+
+    }
+
+
+    document.getElementById("totalWords").textContent = total;
+
+    document.getElementById("correctWords").textContent = correct;
+
+    document.getElementById("incorrectWords").textContent = incorrect;
+
+    document.getElementById("accuracy").textContent =
+        accuracy + "%";
+
+
+    /*
+     * Practice words
+     */
+
+    const practice = document.getElementById("practice");
+
+    const practiceWords =
+        document.getElementById("practiceWords");
+
+
+    practiceWords.innerHTML = "";
+
+
+    const incorrectWords =
+        getIncorrectWords(passage);
+
+
+    if (incorrectWords.length > 0) {
+
+        practice.classList.add("show");
+
+
+        incorrectWords.forEach(word => {
+
+            const span =
+                document.createElement("span");
+
+            span.className = "practice-word";
+
+            span.textContent = word;
+
+            practiceWords.appendChild(span);
+
+        });
+
+    } else {
+
+        practice.classList.remove("show");
+
+    }
+
+
+    updateSessionStats();
+
+}
+
+
+/* =========================================================
+   SAVE SESSION RESULT
+   ========================================================= */
+
+function updateSessionStats() {
+
+    /*
+     * Calculate all passages that have been attempted.
+     */
+
+    const results = passageHistory.map(passage => {
+
+        const total = countWords(passage);
+
+        const incorrect = passage.incorrect.length;
+
+        const correct = total - incorrect;
+
+        return {
+
+            total: total,
+
+            correct: correct,
+
+            accuracy:
+                total > 0
+                    ? Math.round((correct / total) * 100)
+                    : 100
+
+        };
+
+    });
+
+
+    const attempted = results.filter(
+        result => result.incorrect.length > 0
+    );
+
+
+    /*
+     * For the progress section, count passages
+     * that have been interacted with OR completed.
+     *
+     * Here we count every passage the student has visited.
+     */
+
+    const passages = passageHistory.length;
+
+
+    let totalCorrect = 0;
+
+    let totalWords = 0;
+
+
+    results.forEach(result => {
+
+        totalCorrect += result.correct;
+
+        totalWords += result.total;
+
+    });
+
+
+    let average = 100;
+
+    if (totalWords > 0) {
+
+        average = Math.round(
+            (totalCorrect / totalWords) * 100
+        );
+
+    }
+
+
+    document.getElementById("passagesRead").textContent =
+        passages;
+
+    document.getElementById("averageAccuracy").textContent =
+        average + "%";
+
+    document.getElementById("wordsRead").textContent =
+        totalCorrect;
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+function updateNavigation() {
+
+    const backBtn =
+        document.getElementById("backBtn");
+
+    backBtn.disabled =
+        currentPassageIndex === 0;
+
+}
+
+
+/* =========================================================
+   STORY NUMBER
+   ========================================================= */
+
+function updateStoryNumber() {
+
+    document.getElementById("storyNumber").textContent =
+        "Passage " + (currentPassageIndex + 1);
+
+
+    let label = "🌱 Beginner";
+
+
+    if (currentLevel === "medium") {
+
+        label = "🌿 Medium";
+
+    }
+
+    if (currentLevel === "hard") {
+
+        label = "🌳 Hard";
+
+    }
+
+
+    document.getElementById("levelLabel").textContent =
+        label;
+
+}
+
+
+/* =========================================================
+   NEW STORY
+   ========================================================= */
+
+function newStory() {
+
+    const passage = createPassage(currentLevel);
+
+
+    /*
+     * If the user creates a new story while looking
+     * at an older passage, remove the future history.
+     */
+
+    passageHistory =
+        passageHistory.slice(
+            0,
+            currentPassageIndex + 1
+        );
+
+
+    passageHistory.push(passage);
+
+    currentPassageIndex =
+        passageHistory.length - 1;
+
+
+    displayPassage();
+
+}
+
+
+/* =========================================================
+   NEXT
+   ========================================================= */
+
+function nextStory() {
+
+    /*
+     * If a future story already exists,
+     * simply move to it.
+     */
+
+    if (
+        currentPassageIndex <
+        passageHistory.length - 1
+    ) {
+
+        currentPassageIndex++;
+
+        currentLevel =
+            passageHistory[currentPassageIndex].level;
+
+        updateLevelButtons();
+
+        displayPassage();
+
+        return;
+
+    }
+
+
+    /*
+     * Otherwise create a new story.
+     */
+
+    newStory();
+
+}
+
+
+/* =========================================================
+   BACK
+   ========================================================= */
+
+function previousStory() {
+
+    if (currentPassageIndex <= 0) return;
+
+
+    currentPassageIndex--;
+
+
+    currentLevel =
+        passageHistory[currentPassageIndex].level;
+
+
+    updateLevelButtons();
+
+    displayPassage();
+
+}
+
+
+/* =========================================================
+   LEVEL BUTTONS
+   ========================================================= */
+
+function updateLevelButtons() {
+
+    document.querySelectorAll(".level-btn")
+        .forEach(button => {
+
+            button.classList.remove("active");
+
+            if (
+                button.dataset.level ===
+                currentLevel
+            ) {
+
+                button.classList.add("active");
+
+            }
+
+        });
+
+}
+
+
+/* =========================================================
+   CHANGE LEVEL
+   ========================================================= */
+
+document.querySelectorAll(".level-btn")
+    .forEach(button => {
+
+        button.addEventListener("click", function() {
+
+            currentLevel =
+                this.dataset.level;
+
+
+            updateLevelButtons();
+
+
+            /*
+             * Changing level immediately creates
+             * a new appropriate story.
+             */
+
+            newStory();
+
+        });
+
+    });
+
+
+/* =========================================================
+   BUTTON EVENTS
+   ========================================================= */
+
+document.getElementById("newBtn")
+    .addEventListener("click", newStory);
+
+
+document.getElementById("nextBtn")
+    .addEventListener("click", nextStory);
+
+
+document.getElementById("backBtn")
+    .addEventListener("click", previousStory);
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+document.getElementById("resetBtn")
+    .addEventListener("click", function() {
+
+        const confirmed =
+            confirm(
+                "Reset today's reading progress?"
+            );
+
+
+        if (!confirmed) return;
+
+
+        passageHistory = [];
+
+        currentPassageIndex = 0;
+
+        currentLevel = "beginner";
+
+        updateLevelButtons();
+
+        newStory();
+
+    });
+
+
+/* =========================================================
+   START APP
+   ========================================================= */
+
+newStory();
+
+</script>
+
+</body>
+</html>
